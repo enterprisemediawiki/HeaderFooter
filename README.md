@@ -1,0 +1,2 @@
+MediaWiki-HeaderFooter
+======================
