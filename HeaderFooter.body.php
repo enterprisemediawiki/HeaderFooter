@@ -1,8 +1,9 @@
 <?php
 /**
  * @author Jean-Lou Dupont
+ * @author Jamesmontalvo3
  * @package HeaderFooter
- * @version 2.0.1
+ * @version 2.0.2
  * @Id $Id: HeaderFooter.body.php 1170 2008-05-27 12:38:24Z jeanlou.dupont $
  */
 //<source lang='php'>
