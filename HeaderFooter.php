@@ -10,15 +10,10 @@
 $wgExtensionCredits['other'][] = array( 
 	'name'        => 'HeaderFooter', 
 	'version'     => '2.0.2',
-	'author'      => 'Jean-Lou Dupont, James Montalvo', 
+	'author'      => 'Jean-Lou Dupont, James Montalvo, Douglas Mason', 
 	'description' => 'Enables per-page/per-namespace headers and footers',
 	'url' 		=> 'http://mediawiki.org/wiki/Extension:HeaderFooter',			
 );
 
-$wgHooks['OutputPageParserOutput'][] = 'fnHeaderFooterSetup';
+$wgHooks['OutputPageParserOutput'][] = 'HeaderFooter::hOutputPageParserOutput';
 $wgAutoloadClasses['HeaderFooter'] = dirname(__FILE__) . '/' . 'HeaderFooter.body.php';
-
-function fnHeaderFooterSetup ($op, $parserOutput) {
-	$test = new HeaderFooter();
-	return $test->hOutputPageParserOutput($op, $parserOutput);
-}
