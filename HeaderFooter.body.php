@@ -4,7 +4,7 @@
  * @author Jamesmontalvo3
  * @author Douglas Mason
  * @package HeaderFooter
- * @version 2.0.3
+ * @version 2.0.4
  * @Id $Id: HeaderFooter.body.php 1170 2008-05-27 12:38:24Z jeanlou.dupont $
  */
 //<source lang='php'>
@@ -13,7 +13,7 @@ class HeaderFooter
 	/**
 	 * Main Hook
 	 */
-	public function hOutputPageParserOutput( &$op, $parserOutput )
+	public static function hOutputPageParserOutput( &$op, $parserOutput )
 	{
 		$action = $op->parserOptions()->getUser()->getRequest()->getVal("action");
 		if ( ($action == 'edit') || ($action == 'submit') || ($action == 'history') )
@@ -32,11 +32,11 @@ class HeaderFooter
         $header = "hf-header-$name";
         $footer = "hf-footer-$name";        
 
-		$text = '<div class="hf-header">'.$this->conditionalInclude( $text, '__NOHEADER__', $header ).'</div>'.$text;
-		$text = '<div class="hf-nsheader">'.$this->conditionalInclude( $text, '__NONSHEADER__', $nsheader ).'</div>'.$text;
+		$text = '<div class="hf-header">'.self::conditionalInclude( $text, '__NOHEADER__', $header ).'</div>'.$text;
+		$text = '<div class="hf-nsheader">'.self::conditionalInclude( $text, '__NONSHEADER__', $nsheader ).'</div>'.$text;
 
-		$text .= '<div class="hf-footer">'.$this->conditionalInclude( $text, '__NOFOOTER__', $footer ).'</div>';
-		$text .= '<div class="hf-nsfooter">'.$this->conditionalInclude( $text, '__NONSFOOTER__', $nsfooter ).'</div>';
+		$text .= '<div class="hf-footer">'.self::conditionalInclude( $text, '__NOFOOTER__', $footer ).'</div>';
+		$text .= '<div class="hf-nsfooter">'.self::conditionalInclude( $text, '__NONSFOOTER__', $nsfooter ).'</div>';
 		
 		$parserOutput->setText( $text );
 		
