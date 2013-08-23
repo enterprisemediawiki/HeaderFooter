@@ -46,7 +46,7 @@ class HeaderFooter
 	/**
 	 * Verifies & Strips ''disable command'', returns $content if all OK.
 	 */
-	protected function conditionalInclude( &$text, $disableWord, &$msgId, $protect )
+	static function conditionalInclude( &$text, $disableWord, &$msgId )
 	{
 		// is there a disable command lurking around?
 		$disable = strpos( $text, $disableWord ) !== false ;
