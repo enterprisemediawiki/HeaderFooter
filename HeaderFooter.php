@@ -8,9 +8,9 @@
  * Note: increased from v2.0.1 by James Montalvo for StubManager dependency removal
  */
 $wgExtensionCredits['other'][] = array( 
-	'name'        => 'HeaderFooter', 
-	'version'     => '2.0.2',
-	'author'      => 'Jean-Lou Dupont, James Montalvo, Douglas Mason', 
+	'name'		=> 'HeaderFooter', 
+	'version'	 => '2.0.2',
+	'author'	  => 'Jean-Lou Dupont, James Montalvo, Douglas Mason', 
 	'description' => 'Enables per-page/per-namespace headers and footers',
 	'url' 		=> 'http://mediawiki.org/wiki/Extension:HeaderFooter',			
 );

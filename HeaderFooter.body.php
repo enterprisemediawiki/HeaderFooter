@@ -26,11 +26,11 @@ class HeaderFooter
 		
 		$text = $parserOutput->getText();
 		
-        $nsheader = "hf-nsheader-$ns";
-        $nsfooter = "hf-nsfooter-$ns";      
+		$nsheader = "hf-nsheader-$ns";
+		$nsfooter = "hf-nsfooter-$ns";	  
  
-        $header = "hf-header-$name";
-        $footer = "hf-footer-$name";        
+		$header = "hf-header-$name";
+		$footer = "hf-footer-$name";		
 
 		$text = '<div class="hf-header">'.self::conditionalInclude( $text, '__NOHEADER__', $header ).'</div>'.$text;
 		$text = '<div class="hf-nsheader">'.self::conditionalInclude( $text, '__NONSHEADER__', $nsheader ).'</div>'.$text;
@@ -43,33 +43,33 @@ class HeaderFooter
 		return true;
 	}	 
  
-    /**
-     * Verifies & Strips ''disable command'', returns $content if all OK.
-     */
-    protected function conditionalInclude( &$text, $disableWord, &$msgId, $protect )
-    {
-        // is there a disable command lurking around?
-        $disable = strpos( $text, $disableWord ) !== false ;
+	/**
+	 * Verifies & Strips ''disable command'', returns $content if all OK.
+	 */
+	protected function conditionalInclude( &$text, $disableWord, &$msgId, $protect )
+	{
+		// is there a disable command lurking around?
+		$disable = strpos( $text, $disableWord ) !== false ;
  
-        // if there is, get rid of it
-        // make sure that the disableWord does not break the REGEX below!
-        $text = preg_replace('/'.$disableWord.'/si', '', $text );
+		// if there is, get rid of it
+		// make sure that the disableWord does not break the REGEX below!
+		$text = preg_replace('/'.$disableWord.'/si', '', $text );
  
-        // if there is a disable command, then don't return anything
-        if ($disable)
-            return null;
+		// if there is a disable command, then don't return anything
+		if ($disable)
+			return null;
  
-        $msgText = wfMsgExt( $msgId, array( 'parseinline' ) );
+		$msgText = wfMsgExt( $msgId, array( 'parseinline' ) );
  
-        // don't need to bother if there is no content.
-        if (empty( $msgText ))
-            return null;
+		// don't need to bother if there is no content.
+		if (empty( $msgText ))
+			return null;
  
-        if (wfEmptyMsg( $msgId, $msgText ))
-            return null;
+		if (wfEmptyMsg( $msgId, $msgText ))
+			return null;
  
-        return $msgText;
-    }
+		return $msgText;
+	}
 		
 } // END CLASS DEFINITION
 //</source>
