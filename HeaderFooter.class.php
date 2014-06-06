@@ -1,13 +1,7 @@
 <?php
 /**
- * @author Jean-Lou Dupont
- * @author Jamesmontalvo3
- * @author Douglas Mason
  * @package HeaderFooter
- * @version 2.0.4
- * @Id $Id: HeaderFooter.body.php 1170 2008-05-27 12:38:24Z jeanlou.dupont $
  */
-//<source lang='php'>
 class HeaderFooter
 {
 	/**
@@ -72,4 +66,3 @@ class HeaderFooter
 	}
 		
 } // END CLASS DEFINITION
-//</source>

@@ -1,0 +1,36 @@
+{
+	"name": "enterprisemediawiki/header-footer",
+	"type": "mediawiki-extension",
+	"description": "Provides per-namespace and per-page header and footer inclusion",
+	"keywords": [
+		"MediaWiki",
+		"Header",
+		"Footer"
+	],
+	"homepage": "https://www.mediawiki.org/wiki/Extension:Header_Footer",
+	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "Jean-Lou Dupont",
+			"role": "Original developer"
+		},
+		{
+			"name": "Douglas Mason",
+			"role": "Developer"
+		},
+		{
+			"name": "James Montalvo",
+			"role": "Current developer"
+		}
+	],
+	"support": {
+		"issues": "https://bugzilla.wikimedia.org/",
+		"github": "https://github.com/enterprisemediawiki/HeaderFooter/issues"
+	},
+	"require": {
+		"composer/installers": ">=1.0.1"
+	},
+	"autoload": {
+		"files": ["HeaderFooter.php"]
+	}
+}
