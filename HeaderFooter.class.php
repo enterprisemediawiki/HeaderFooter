@@ -53,13 +53,13 @@ class HeaderFooter
 		if ($disable)
 			return null;
  
-		$msgText = wfMsgExt( $msgId, array( 'parseinline' ) );
+		$msgText = wfMessage( $msgId, array( 'parseinline' ) );
  
 		// don't need to bother if there is no content.
 		if (empty( $msgText ))
 			return null;
  
-		if (wfEmptyMsg( $msgId, $msgText ))
+		if (wfMessage( $msgId, $msgText ))
 			return null;
  
 		return $msgText;
