@@ -1,5 +1,5 @@
 {
-	"name": "enterprisemediawiki/header-footer",
+	"name": "mediawiki/header-footer",
 	"type": "mediawiki-extension",
 	"description": "Provides per-namespace and per-page header and footer inclusion",
 	"keywords": [
