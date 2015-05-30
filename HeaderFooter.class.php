@@ -55,18 +55,20 @@ class HeaderFooter
 			return null;
 		}
 
-		$msgText = wfMessage( $msgId )->parse();
-
-		// don't need to bother if there is no content.
-		if ( empty( $msgText ) ) {
-			return null;
+		$title = Title::newFromText("MediaWiki:".$msgId);
+		$a = new Article($title);
+		global $wgUser, $wgParser;
+		$cache = ParserCache::singleton();
+		$opts = $a->makeParserOptions($wgUser);
+		if( ( $output = $cache->get( $a, $opts ) ) === false ) {
+			$output = $wgParser->parse(
+				$a->getContent(),
+				$a->getTitle(),
+				$opts
+			);
+			$cache->save( $output, $a, $opts );
 		}
-
-		if ( wfMessage( $msgId )->inContentLanguage()->isBlank() ) {
-			return null;
- 		}
-
-		return $msgText;
+		return $output->getText(); 
 	}
 
 }
