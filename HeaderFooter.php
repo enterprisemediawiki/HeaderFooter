@@ -1,4 +1,9 @@
 <?php
+if ( function_exists( 'wfLoadExtension' ) ) {
+    echo "Please use<pre>wfLoadExtension('HeaderFooter');</pre>to load this extensions.";
+    exit(1);
+}
+
 /**
  * @author Jean-Lou Dupont
  * @author Jamesmontalvo3
@@ -7,7 +12,7 @@
  */
 
 # Credits
-$GLOBALS['wgExtensionCredits']['other'][] = array( 
+$wgExtensionCredits['other'][] = array( 
 	'name'		  => 'HeaderFooter', 
 	'version'	  => '2.1.1',
 	'author'	  => 'Jean-Lou Dupont, James Montalvo, Douglas Mason', 
@@ -16,7 +21,7 @@ $GLOBALS['wgExtensionCredits']['other'][] = array(
 );
 
 # Hooks
-$GLOBALS['wgHooks']['OutputPageParserOutput'][] = 'HeaderFooter::hOutputPageParserOutput';
+$wgHooks['OutputPageParserOutput'][] = 'HeaderFooter::hOutputPageParserOutput';
 
 # Autoload
-$GLOBALS['wgAutoloadClasses']['HeaderFooter'] = __DIR__ . '/HeaderFooter.class.php';
+$wgAutoloadClasses['HeaderFooter'] = __DIR__ . '/HeaderFooter.class.php';
