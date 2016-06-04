@@ -4,20 +4,42 @@
  */
 class HeaderFooter
 {
+    protected static function shouldUse( OutputPage $out ) {
+		$action = $out->parserOptions()->getUser()->getRequest()->getVal("action");
+		if ( ($action == 'edit') || ($action == 'submit') || ($action == 'history') ) {
+			return false;
+		}
+        return true;
+    }
+
+    public static function onSkinTemplateOutputPageBeforeExec(
+        SkinTemplate $skin,
+        BaseTemplate $tpl
+    ) {
+        $out = $skin->getOutput();
+        if ( !self::shouldUse( $out ) ) {
+            return true;
+        }
+		$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
+        if ( $msgText->isDisabled() ) {
+            return true;
+        }
+        
+        $topHeader = '<div id="hf-header-top">' . $msgText . '</div>';
+        $tpl->set( 'headelement', $tpl->get( 'headelement' ) . $topHeader );
+        return true;
+    }
+
 	/**
 	 * Main Hook
 	 */
 	public static function hOutputPageParserOutput( &$op, $parserOutput ) {
-
-		$action = $op->parserOptions()->getUser()->getRequest()->getVal("action");
-		if ( ($action == 'edit') || ($action == 'submit') || ($action == 'history') ) {
-			return true;
-		}
-
-		global $wgTitle;
-
-		$ns = $wgTitle->getNsText();
-		$name = $wgTitle->getPrefixedDBKey();
+        if ( !self::shouldUse( $op ) ) {
+            return true;
+        }
+        $title = $op->getTitle();
+		$ns = $title->getNsText();
+		$name = $title->getPrefixedDBKey();
 
 		$text = $parserOutput->getText();
 
