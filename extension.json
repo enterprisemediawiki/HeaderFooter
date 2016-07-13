@@ -8,11 +8,14 @@
 	"AutoloadClasses": {
 		"HeaderFooter": "HeaderFooter.class.php"
 	},
-    "Hooks": {
-	"SkinTemplateOutputPageBeforeExec": [
-	    "HeaderFooter::onSkinTemplateOutputPageBeforeExec"
-	],
-	
+	"Hooks": {
+		"SkinTemplateOutputPageBeforeExec": [
+			"HeaderFooter::onSkinTemplateOutputPageBeforeExec"
+		],
+		"SkinOutBeforePersonalTools": [
+			"HeaderFooter::onSkinOutBeforePersonalTools"
+		],
+
 		"OutputPageParserOutput": [
 			"HeaderFooter::hOutputPageParserOutput"
 		]

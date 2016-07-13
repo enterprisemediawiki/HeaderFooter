@@ -4,40 +4,53 @@
  */
 class HeaderFooter
 {
-    protected static function shouldUse( OutputPage $out ) {
+	protected static function shouldUse( OutputPage $out ) {
 		$action = $out->parserOptions()->getUser()->getRequest()->getVal("action");
 		if ( ($action == 'edit') || ($action == 'submit') || ($action == 'history') ) {
 			return false;
 		}
-        return true;
-    }
+		return true;
+	}
 
-    public static function onSkinTemplateOutputPageBeforeExec(
-        SkinTemplate $skin,
-        BaseTemplate $tpl
-    ) {
-        $out = $skin->getOutput();
-        if ( !self::shouldUse( $out ) ) {
-            return true;
-        }
+	/* This is only used on my hacked Vector skin and should disappear */
+	public static function onSkinOutBeforePersonalTools( BaseTemplate $tpl ) {
 		$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
-        if ( $msgText->isDisabled() ) {
-            return true;
-        }
-        
-        $topHeader = '<div id="hf-header-top">' . $msgText . '</div>';
-        $tpl->set( 'headelement', $tpl->get( 'headelement' ) . $topHeader );
-        return true;
-    }
+		if ( $msgText->isDisabled() ) {
+			return true;
+		}
+
+		echo $msgText;
+		return true;
+	}
+
+	public static function onSkinTemplateOutputPageBeforeExec(
+		SkinTemplate $skin,
+		BaseTemplate $tpl
+	) {
+		$out = $skin->getOutput();
+		if ( !self::shouldUse( $out ) ) {
+			return true;
+		}
+		$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
+		if ( $msgText->isDisabled() ) {
+			return true;
+		}
+		if ( $skin->getSkinName() !== 'foreground' ) {
+			return true;
+		}
+		$topHeader = '<div id="hf-top-header">' . $msgText . '</div>';
+		$tpl->set( 'headelement', $tpl->get( 'headelement' ) . $topHeader );
+		return true;
+	}
 
 	/**
 	 * Main Hook
 	 */
 	public static function hOutputPageParserOutput( &$op, $parserOutput ) {
-        if ( !self::shouldUse( $op ) ) {
-            return true;
-        }
-        $title = $op->getTitle();
+		if ( !self::shouldUse( $op ) ) {
+			return true;
+		}
+		$title = $op->getTitle();
 		$ns = $title->getNsText();
 		$name = $title->getPrefixedDBKey();
 
@@ -64,7 +77,7 @@ class HeaderFooter
 	 * Verifies & Strips ''disable command'', returns $content if all OK.
 	 */
 	static function conditionalInclude( &$text, $disableWord, &$msgId ) {
-		
+
 		// is there a disable command lurking around?
 		$disable = strpos( $text, $disableWord ) !== false;
 
@@ -86,7 +99,7 @@ class HeaderFooter
 
 		if ( wfMessage( $msgId )->inContentLanguage()->isBlank() ) {
 			return null;
- 		}
+		}
 
 		return $msgText;
 	}
