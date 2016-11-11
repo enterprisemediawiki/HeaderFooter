@@ -5,8 +5,13 @@
 class HeaderFooter
 {
 	protected static function shouldUse( OutputPage $out ) {
-		$action = $out->parserOptions()->getUser()->getRequest()->getVal("action");
-		if ( ($action == 'edit') || ($action == 'submit') || ($action == 'history') ) {
+		$action
+			= $out->parserOptions()->getUser()->getRequest()->getVal("action");
+		if (
+			($action === 'edit') ||
+			($action === 'submit') ||
+			($action === 'history') )
+		{
 			return false;
 		}
 		return true;
@@ -14,10 +19,17 @@ class HeaderFooter
 
 	/* This is only used on my hacked Vector skin and should disappear */
 	public static function onSkinOutBeforePersonalTools( BaseTemplate $tpl ) {
-		$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
-		if ( $msgText->isDisabled() ) {
+		$ctx = new RequestContext();
+		$title = $ctx->getTitle();
+		$ns = $title->getNsText();
+		$msgNs = wfMessage( 'hf-top-header-' . $ns );
+		$msg = wfMessage( 'hf-top-header' );
+		if ( $msg->isDisabled() && $msgNs->isDisabled() ) {
 			return true;
 		}
+		$msgText = !$msgNs->isDisabled()
+				 ? $msgNs->inContentLanguage()
+				 : $msg->inContentLanguage();
 
 		echo $msgText;
 		return true;
@@ -62,11 +74,18 @@ class HeaderFooter
 		$header = "hf-header-$name";
 		$footer = "hf-footer-$name";
 
-		$text = '<div class="hf-header">'.self::conditionalInclude( $text, '__NOHEADER__', $header ).'</div>'.$text;
-		$text = '<div class="hf-nsheader">'.self::conditionalInclude( $text, '__NONSHEADER__', $nsheader ).'</div>'.$text;
-
-		$text .= '<div class="hf-footer">'.self::conditionalInclude( $text, '__NOFOOTER__', $footer ).'</div>';
-		$text .= '<div class="hf-nsfooter">'.self::conditionalInclude( $text, '__NONSFOOTER__', $nsfooter ).'</div>';
+		$text = '<div class="hf-header">' .
+			  self::conditionalInclude( $text, '__NOHEADER__', $header ) .
+			  '</div>'.$text;
+		$text = '<div class="hf-nsheader">' .
+			  self::conditionalInclude( $text, '__NONSHEADER__', $nsheader ) .
+			  '</div>'.$text;
+		$text .= '<div class="hf-footer">' .
+			  self::conditionalInclude( $text, '__NOFOOTER__', $footer ) .
+			  '</div>';
+		$text .= '<div class="hf-nsfooter">' .
+			  self::conditionalInclude( $text, '__NONSFOOTER__', $nsfooter ) .
+			  '</div>';
 
 		$parserOutput->setText( $text );
 
