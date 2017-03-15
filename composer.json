@@ -21,6 +21,10 @@
 		{
 			"name": "James Montalvo",
 			"role": "Current developer"
+		},
+		{
+			"name": "Mark A. Hershberger",
+			"role": "Developer"
 		}
 	],
 	"support": {
@@ -31,6 +35,6 @@
 		"composer/installers": ">=1.0.1"
 	},
 	"autoload": {
-		"files": ["HeaderFooter.php"]
+		"files": ["src/Hook.php"]
 	}
 }
