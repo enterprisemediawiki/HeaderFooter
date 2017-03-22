@@ -1,0 +1,24 @@
+{
+	"name": "HeaderFooter",
+	"version": "2.1.1",
+	"author": "Jean-Lou Dupont, James Montalvo, Douglas Mason, [mwstake.org Mark A. Hershberger]",
+	"url": "http://mediawiki.org/wiki/Extension:HeaderFooter",
+	"description": "Enables per-page/per-namespace headers and footers",
+	"type": "other",
+	"AutoloadClasses": {
+		"HeaderFooter": "HeaderFooter.class.php"
+	},
+	"Hooks": {
+		"SkinTemplateOutputPageBeforeExec": [
+			"HeaderFooter::onSkinTemplateOutputPageBeforeExec"
+		],
+		"SkinOutBeforePersonalTools": [
+			"HeaderFooter::onSkinOutBeforePersonalTools"
+		],
+
+		"OutputPageParserOutput": [
+			"HeaderFooter::hOutputPageParserOutput"
+		]
+	},
+	"manifest_version": 1
+}

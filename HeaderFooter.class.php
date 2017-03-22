@@ -4,20 +4,67 @@
  */
 class HeaderFooter
 {
+	protected static function shouldUse( OutputPage $out ) {
+		$action
+			= $out->parserOptions()->getUser()->getRequest()->getVal("action");
+		if (
+			($action === 'edit') ||
+			($action === 'submit') ||
+			($action === 'history') )
+		{
+			return false;
+		}
+		return true;
+	}
+
+	/* This is only used on my hacked Vector skin and should disappear */
+	public static function onSkinOutBeforePersonalTools( BaseTemplate $tpl ) {
+		$ctx = new RequestContext();
+		$title = $ctx->getTitle();
+		$ns = $title->getNsText();
+		$msgNs = wfMessage( 'hf-top-header-' . $ns );
+		$msg = wfMessage( 'hf-top-header' );
+		if ( $msg->isDisabled() && $msgNs->isDisabled() ) {
+			return true;
+		}
+		$msgText = !$msgNs->isDisabled()
+				 ? $msgNs->inContentLanguage()
+				 : $msg->inContentLanguage();
+
+		echo $msgText;
+		return true;
+	}
+
+	public static function onSkinTemplateOutputPageBeforeExec(
+		SkinTemplate $skin,
+		BaseTemplate $tpl
+	) {
+		$out = $skin->getOutput();
+		if ( !self::shouldUse( $out ) ) {
+			return true;
+		}
+		$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
+		if ( $msgText->isDisabled() ) {
+			return true;
+		}
+		if ( $skin->getSkinName() !== 'foreground' ) {
+			return true;
+		}
+		$topHeader = '<div id="hf-top-header">' . $msgText . '</div>';
+		$tpl->set( 'headelement', $tpl->get( 'headelement' ) . $topHeader );
+		return true;
+	}
+
 	/**
 	 * Main Hook
 	 */
 	public static function hOutputPageParserOutput( &$op, $parserOutput ) {
-
-		$action = $op->parserOptions()->getUser()->getRequest()->getVal("action");
-		if ( ($action == 'edit') || ($action == 'submit') || ($action == 'history') ) {
+		if ( !self::shouldUse( $op ) ) {
 			return true;
 		}
-
-		global $wgTitle;
-
-		$ns = $wgTitle->getNsText();
-		$name = $wgTitle->getPrefixedDBKey();
+		$title = $op->getTitle();
+		$ns = $title->getNsText();
+		$name = $title->getPrefixedDBKey();
 
 		$text = $parserOutput->getText();
 
@@ -27,11 +74,18 @@ class HeaderFooter
 		$header = "hf-header-$name";
 		$footer = "hf-footer-$name";
 
-		$text = '<div class="hf-header">'.self::conditionalInclude( $text, '__NOHEADER__', $header ).'</div>'.$text;
-		$text = '<div class="hf-nsheader">'.self::conditionalInclude( $text, '__NONSHEADER__', $nsheader ).'</div>'.$text;
-
-		$text .= '<div class="hf-footer">'.self::conditionalInclude( $text, '__NOFOOTER__', $footer ).'</div>';
-		$text .= '<div class="hf-nsfooter">'.self::conditionalInclude( $text, '__NONSFOOTER__', $nsfooter ).'</div>';
+		$text = '<div class="hf-header">' .
+			  self::conditionalInclude( $text, '__NOHEADER__', $header ) .
+			  '</div>'.$text;
+		$text = '<div class="hf-nsheader">' .
+			  self::conditionalInclude( $text, '__NONSHEADER__', $nsheader ) .
+			  '</div>'.$text;
+		$text .= '<div class="hf-footer">' .
+			  self::conditionalInclude( $text, '__NOFOOTER__', $footer ) .
+			  '</div>';
+		$text .= '<div class="hf-nsfooter">' .
+			  self::conditionalInclude( $text, '__NONSFOOTER__', $nsfooter ) .
+			  '</div>';
 
 		$parserOutput->setText( $text );
 
@@ -42,7 +96,7 @@ class HeaderFooter
 	 * Verifies & Strips ''disable command'', returns $content if all OK.
 	 */
 	static function conditionalInclude( &$text, $disableWord, &$msgId ) {
-		
+
 		// is there a disable command lurking around?
 		$disable = strpos( $text, $disableWord ) !== false;
 
@@ -64,7 +118,7 @@ class HeaderFooter
 
 		if ( wfMessage( $msgId )->inContentLanguage()->isBlank() ) {
 			return null;
- 		}
+		}
 
 		return $msgText;
 	}
