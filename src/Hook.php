@@ -64,19 +64,25 @@ class Hook {
 			return true;
 		}
 
-		$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
+		$namespace = $out->getTitle()->getNsText();
+		$msgText = wfMessage( 'hf-top-header-' . $namespace )->inContentLanguage();
+		if ( $msgText->isDisabled() ) {
+			$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
+		}
 		if ( !$msgText->isDisabled() ) {
 			$header = Xml::Element( "div", [ 'id' => 'hf-top-header' ],
-									$nsMsgText->plain() );
+									$msgText->parse() );
 			$tpl->set( 'headelement', $tpl->get( 'headelement' ) . $header );
 		}
 
-		$namespace = $out->getTitle()->getNsText();
 		$nsMsgText = wfMessage( 'hf-sticky-header-' . $namespace )->inContentLanguage();
+		if ( $nsMsgText->isDisabled() ) {
+			$nsMsgText = wfMessage( 'hf-sticky-header' )->inContentLanguage();
+		}
 		if ( !$nsMsgText->isDisabled() ) {
 			$header = Xml::tags( "div", [ 'id' => 'hfStickyHeader' ],
 									$nsMsgText->parse() );
-			$tpl->set( 'prebodyhtml', $tpl->get( 'prebodyhtml' ) . $header );
+			$tpl->set( 'sitenotice', $tpl->get( 'sitenotice' ) . $header );
 		}
 
 		return true;
