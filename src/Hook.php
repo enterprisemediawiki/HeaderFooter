@@ -65,16 +65,6 @@ class Hook {
 		}
 
 		$namespace = $out->getTitle()->getNsText();
-		$msgText = wfMessage( 'hf-top-header-' . $namespace )->inContentLanguage();
-		if ( $msgText->isDisabled() ) {
-			$msgText = wfMessage( 'hf-top-header' )->inContentLanguage();
-		}
-		if ( !$msgText->isDisabled() ) {
-			$header = Xml::Element( "div", [ 'id' => 'hf-top-header' ],
-									$msgText->parse() );
-			$tpl->set( 'headelement', $tpl->get( 'headelement' ) . $header );
-		}
-
 		$nsMsgText = wfMessage( 'hf-sticky-header-' . $namespace )->inContentLanguage();
 		if ( $nsMsgText->isDisabled() ) {
 			$nsMsgText = wfMessage( 'hf-sticky-header' )->inContentLanguage();
