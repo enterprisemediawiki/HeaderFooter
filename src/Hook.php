@@ -89,7 +89,11 @@ class Hook {
 		if ( !self::shouldUse( $out ) ) {
 			return true;
 		}
-		$out->addModules( 'ext.HFsticky' );
+		global $wgUseStickyHeaders;
+		if ( $wgUseStickyHeaders ) {
+			$out->addModules( 'ext.HFsticky' );
+		}
+
 		$namespace = $out->getTitle()->getNsText();
 		$name = $out->getTitle()->getPrefixedDBKey();
 
