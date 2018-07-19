@@ -14,10 +14,14 @@ class HeaderFooter
 			return true;
 		}
 
-		global $wgTitle;
+		$title = $op->getTitle();
+		if ( $title->isRedirect() ) {
+			$article = Article::newFromID( $title->getArticleID() );
+			$title = $article->getRedirectTarget();
+		}
 
-		$ns = $wgTitle->getNsText();
-		$name = $wgTitle->getPrefixedDBKey();
+		$ns = $title->getNsText();
+		$name = $title->getPrefixedDBKey();
 
 		$text = $parserOutput->getText();
 
