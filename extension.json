@@ -45,7 +45,7 @@
 		}
 	},
 	"config": {
-		"UseStickyHeaders": true
+		"UseStickyHeaders": false
 	},
 	"manifest_version": 1
 }
