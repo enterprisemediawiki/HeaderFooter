@@ -1,0 +1,51 @@
+{
+	"name": "HeaderFooter",
+	"version": "2.2.0",
+	"license-name": "GPL-2.0",
+	"author": [
+		"Jean-Lou Dupont",
+		"James Montalvo",
+		"Douglas Mason",
+		"[mwstake.org Mark A. Hershberger]"
+	],
+	"url": "http://mediawiki.org/wiki/Extension:HeaderFooter",
+	"description": "Enables per-page/per-namespace headers and footers",
+	"type": "other",
+	"AutoloadClasses": {
+		"HeaderFooter\\Hook": "src/Hook.php"
+	},
+	"Hooks": {
+		"SkinTemplateOutputPageBeforeExec": [
+			"HeaderFooter\\Hook::onSkinTemplateOutputPageBeforeExec"
+		],
+		"OutputPageParserOutput": [
+			"HeaderFooter\\Hook::onOutputPageParserOutput"
+		]
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "modules",
+		"remoteExtPath": "HeaderFooter/modules"
+
+	},
+	"ResourceModules": {
+		"ext.HFsticky": {
+			"scripts": [
+				"ext.HFsticky.js"
+			],
+			"styles": [
+				"ext.HFsticky.css"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			],
+			"dependencies": [
+				"jquery.ui.datepicker"
+			]
+		}
+	},
+	"config": {
+		"UseStickyHeaders": false
+	},
+	"manifest_version": 1
+}

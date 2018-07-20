@@ -1,0 +1,17 @@
+#content #hfStickyHeader {
+	top: 0;
+	width: 100%;
+}
+
+#content.fixed #hfStickyHeader {
+	position: fixed;
+	top: 0;
+	z-index: 100;
+	width: 100%;
+	transition: all;
+}
+
+#content.fixed #bodyContent {
+	position: relative;
+	transition: all;
+}
