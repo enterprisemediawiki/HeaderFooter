@@ -13,5 +13,20 @@
 			"HeaderFooter::hOutputPageParserOutput"
 		]
 	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "modules",
+		"remoteExtPath": "HeaderFooter/modules"
+	},
+	"ResourceModules": {
+		"ext.headerfooter.dynamicload": {
+			"scripts": [
+				"dynamicload.js"
+			]
+		}
+	},
+	"config": {
+		"_prefix": "eg",
+		"HeaderFooterDynamicLoad": false
+	},
 	"manifest_version": 1
 }
