@@ -19,16 +19,23 @@ for ( var i = 0; i < extHeaderFooterBlocks.length; i++ ) {
 
 		$.get(
 			mw.config.get("wgScriptPath") + "/api.php",
+			// {
+			// 	action: "query",
+			// 	meta: "allmessages",
+			// 	ammessages: msgId,
+			// 	amenableparser: 1,
+			// 	amtitle: mw.config.get('wgPageName'),
+			// 	format: "json"
+			// },
 			{
-				action: "query",
-				meta: "allmessages",
-				ammessages: msgId,
-				amenableparser: 1,
-				amtitle: mw.config.get('wgPageName'),
+				action: "getheaderfooter",
+				messageid: msgId,
+				contexttitle: mw.config.get('wgPageName'),
 				format: "json"
 			},
 			function ( response ) {
-				var blockText = response.query.allmessages[0]["*"];
+				// var blockText = response.query.allmessages[0]["*"];
+				var blockText = response.getheaderfooter.result;
 				$("#" + msgId).html( blockText );
 			}
 		)
