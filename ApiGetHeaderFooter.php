@@ -15,6 +15,7 @@ class ApiGetHeaderFooter extends ApiBase {
 	public function execute() {
 		global $wgUser;
 
+
 		$params = $this->extractRequestParams();
 		$contextTitle = Title::newFromDBkey( $params['contexttitle'] );
 		if ( ! $contextTitle ) {
@@ -26,7 +27,7 @@ class ApiGetHeaderFooter extends ApiBase {
 		$messageId = $params['messageid'];
 
 		// $messageText = wfMessage( $msgId )->setContext(  $params['contexttitle'] )->parse();
-		$messageText = wfMessage( $messageId )->title( $contextTitle )->parse();
+		$messageText = wfMessage( $messageId )->title( $contextTitle )->text();
 
 		// don't need to bother if there is no content.
 		if ( empty( $messageText ) ) {
@@ -37,6 +38,9 @@ class ApiGetHeaderFooter extends ApiBase {
 			$messageText = '';
 		}
 
+		global $wgParser, $wgUser;
+		$parser = $wgParser;
+		$messageText = $parser->parse( $messageText, $contextTitle, ParserOptions::newFromUser( $wgUser ) )->getText();
 
 		$this->getResult()->addValue( null, $this->getModuleName(), array( 'result' => $messageText ) );
 
