@@ -29,7 +29,8 @@
 	},
 	"config": {
 		"_prefix": "eg",
-		"HeaderFooterDynamicLoad": false
+		"HeaderFooterEnableAsyncHeader": false,
+		"HeaderFooterEnableAsyncFooter": false
 	},
 	"manifest_version": 1
 }
