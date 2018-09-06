@@ -13,9 +13,8 @@
 		"getheaderfooter": "ApiGetHeaderFooter"
 	},
 	"Hooks": {
-		"OutputPageParserOutput": [
-			"HeaderFooter::hOutputPageParserOutput"
-		]
+		"OutputPageParserOutput": "HeaderFooter::hOutputPageParserOutput",
+		"ResourceLoaderGetConfigVars": "HeaderFooter::onResourceLoaderGetConfigVars"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "modules",

@@ -28,8 +28,8 @@ class HeaderFooter
 
 		$parserOutput->setText( $nsheader . $header . $text . $footer . $nsfooter );
 
-		global $egHeaderFooterDynamicLoad;
-		if ( $egHeaderFooterDynamicLoad ) {
+		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
+		if ( $egHeaderFooterEnableAsyncFooter || $egHeaderFooterEnableAsyncHeader ) {
 			$op->addModules( 'ext.headerfooter.dynamicload' );
 		}
 
@@ -56,8 +56,14 @@ class HeaderFooter
 		$msgId = "$class-$unique"; // also HTML ID
 		$div = "<div class='$class' id='$msgId'>";
 
-		global $egHeaderFooterDynamicLoad;
-		if ( $egHeaderFooterDynamicLoad ) {
+		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
+
+		$isHeader = $class === 'hf-nsheader' || $class === 'hf-header';
+		$isFooter = $class === 'hf-nsfooter' || $class === 'hf-footer';
+
+		if ( ( $egHeaderFooterEnableAsyncFooter && $isFooter )
+			|| ( $egHeaderFooterEnableAsyncHeader && $isHeader ) ) {
+
 			// Just drop an empty div into the page. Will fill it with async
 			// request after page load
 			return $div . '</div>';
@@ -76,6 +82,17 @@ class HeaderFooter
 
 			return $div . $msgText . '</div>';
 		}
+	}
+
+	public static function onResourceLoaderGetConfigVars ( array &$vars ) {
+		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
+
+		$vars['egHeaderFooter'] = [
+			'enableAsyncHeader' => $egHeaderFooterEnableAsyncHeader,
+			'enableAsyncFooter' => $egHeaderFooterEnableAsyncFooter,
+		];
+
+		return true;
 	}
 
 }

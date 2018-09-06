@@ -1,5 +1,13 @@
 
-var extHeaderFooterBlocks = [ "hf-nsheader", "hf-header", "hf-footer", "hf-nsfooter" ];
+var egHeaderFooter = mw.config.get( 'egHeaderFooter' );
+
+if ( egHeaderFooter.enableAsyncHeader ) {
+	var extHeaderFooterBlocks = [ "hf-nsheader", "hf-header" ];
+}
+else {
+	var extHeaderFooterBlocks = [];
+}
+extHeaderFooterBlocks = extHeaderFooterBlocks.concat( [ "hf-footer", "hf-nsfooter" ] );
 
 for ( var i = 0; i < extHeaderFooterBlocks.length; i++ ) {
 	var block = extHeaderFooterBlocks[i];
@@ -19,14 +27,6 @@ for ( var i = 0; i < extHeaderFooterBlocks.length; i++ ) {
 
 		$.get(
 			mw.config.get("wgScriptPath") + "/api.php",
-			// {
-			// 	action: "query",
-			// 	meta: "allmessages",
-			// 	ammessages: msgId,
-			// 	amenableparser: 1,
-			// 	amtitle: mw.config.get('wgPageName'),
-			// 	format: "json"
-			// },
 			{
 				action: "getheaderfooter",
 				messageid: msgId,
@@ -37,7 +37,9 @@ for ( var i = 0; i < extHeaderFooterBlocks.length; i++ ) {
 				// var blockText = response.query.allmessages[0]["*"];
 				var blockText = response.getheaderfooter.result;
 				$( "#" + msgId ).html( blockText );
-				$( "#" + msgId ).find( "#headertabs" ).tabs();
+				$( "#" + msgId ).find( "#headertabs" ).each( function(i,e) {
+					$(e).tabs();
+				});
 			}
 		)
 
