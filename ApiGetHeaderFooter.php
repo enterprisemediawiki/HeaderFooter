@@ -4,7 +4,7 @@
  * API module for MediaWiki's HeaderFooter extension.
  *
  * @author James Montalvo
- * @since Version 1.0
+ * @since Version 3.0
  */
 
 /**
