@@ -1,0 +1,17 @@
+{
+	"name": "HeaderFooter",
+	"version": "3.0.0",
+	"author": "Jean-Lou Dupont, James Montalvo, Douglas Mason",
+	"url": "http://mediawiki.org/wiki/Extension:HeaderFooter",
+	"descriptionmsg": "headerfooter-desc",
+	"type": "other",
+	"AutoloadClasses": {
+		"HeaderFooter": "HeaderFooter.class.php"
+	},
+	"Hooks": {
+		"OutputPageParserOutput": [
+			"HeaderFooter::hOutputPageParserOutput"
+		]
+	},
+	"manifest_version": 1
+}
