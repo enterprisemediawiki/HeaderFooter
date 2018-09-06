@@ -1,3 +1,8 @@
 {
-	"headerfooter-desc": "Enables per-page/per-namespace headers and footers"
+	"headerfooter-desc": "Enables per-page/per-namespace headers and footers",
+	"apihelp-getheaderfooter-description": "Retrieve the parsed output of a header or footer in the context of a certain page.",
+	"apihelp-getheaderfooter-summary": "Retrieve the parsed output of a header or footer in the context of a certain page.",
+	"apihelp-getheaderfooter-param-contexttitle": "The title of the page that the header or footer is being added to.",
+	"apihelp-getheaderfooter-param-messageid": "Which header or footer is being requested (e.g. a namespace header)",
+	"apihelp-getheaderfooter-example-1": "Get the NS_MAIN footer for Main Page"
 }

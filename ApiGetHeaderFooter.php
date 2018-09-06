@@ -13,8 +13,6 @@
 class ApiGetHeaderFooter extends ApiBase {
 
 	public function execute() {
-		global $wgUser;
-
 
 		$params = $this->extractRequestParams();
 		$contextTitle = Title::newFromDBkey( $params['contexttitle'] );
@@ -22,11 +20,8 @@ class ApiGetHeaderFooter extends ApiBase {
 			$this->dieUsage( "Not a valid contexttitle.", 'notarget' );
 		}
 
-		// RequestContext::getMain()->setTitle( $contextTitle );
-
 		$messageId = $params['messageid'];
 
-		// $messageText = wfMessage( $msgId )->setContext(  $params['contexttitle'] )->parse();
 		$messageText = wfMessage( $messageId )->title( $contextTitle )->text();
 
 		// don't need to bother if there is no content.
@@ -38,9 +33,13 @@ class ApiGetHeaderFooter extends ApiBase {
 			$messageText = '';
 		}
 
-		global $wgParser, $wgUser;
-		$parser = $wgParser;
-		$messageText = $parser->parse( $messageText, $contextTitle, ParserOptions::newFromUser( $wgUser ) )->getText();
+		global $wgParser;
+
+		$messageText = $wgParser->parse(
+			$messageText,
+			$contextTitle,
+			ParserOptions::newFromUser( $this->getUser() )
+		)->getText();
 
 		$this->getResult()->addValue( null, $this->getModuleName(), array( 'result' => $messageText ) );
 
@@ -69,14 +68,6 @@ class ApiGetHeaderFooter extends ApiBase {
 		);
 	}
 
-	// "apihelp-getheaderfooter-description": "Retrieve the parsed output of a header or footer in the context of a certain page.",
-	// "apihelp-getheaderfooter-summary": "Retrieve the parsed output of a header or footer in the context of a certain page.",
-	// "apihelp-getheaderfooter-param-contexttitle": "The title of the page that the header or footer is being added to.",
-	// "apihelp-getheaderfooter-param-messageid": "Which header or footer is being requested (e.g. a namespace header)",
-	// "apihelp-getheaderfooter-example-1": "Approve Revision 12345",
-
-
-
 	public function mustBePosted() {
 		return false;
 	}
@@ -85,16 +76,4 @@ class ApiGetHeaderFooter extends ApiBase {
 		return false;
 	}
 
-	/*
-	 * CSRF Token must be POSTed
-	 * use parameter name 'token'
-	 * No need to document, this is automatically done by ApiBase
-	 */
-	// public function needsToken() {
-	// 	return 'csrf';
-	// }
-
-	// public function getTokenSalt() {
-	// 	return 'e-ar';
-	// }
 }
