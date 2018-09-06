@@ -6,12 +6,31 @@
 	"descriptionmsg": "headerfooter-desc",
 	"type": "other",
 	"AutoloadClasses": {
-		"HeaderFooter": "HeaderFooter.class.php"
+		"HeaderFooter": "HeaderFooter.class.php",
+		"ApiGetHeaderFooter": "ApiGetHeaderFooter.php"
+	},
+	"APIModules": {
+		"getheaderfooter": "ApiGetHeaderFooter"
 	},
 	"Hooks": {
-		"OutputPageParserOutput": [
-			"HeaderFooter::hOutputPageParserOutput"
-		]
+		"OutputPageParserOutput": "HeaderFooter::hOutputPageParserOutput",
+		"ResourceLoaderGetConfigVars": "HeaderFooter::onResourceLoaderGetConfigVars"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "modules",
+		"remoteExtPath": "HeaderFooter/modules"
+	},
+	"ResourceModules": {
+		"ext.headerfooter.dynamicload": {
+			"scripts": [
+				"dynamicload.js"
+			]
+		}
+	},
+	"config": {
+		"_prefix": "eg",
+		"HeaderFooterEnableAsyncHeader": false,
+		"HeaderFooterEnableAsyncFooter": false
 	},
 	"manifest_version": 1
 }

@@ -21,19 +21,17 @@ class HeaderFooter
 
 		$text = $parserOutput->getText();
 
-		$nsheader = "hf-nsheader-$ns";
-		$nsfooter = "hf-nsfooter-$ns";
+		$nsheader = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
+		$header   = self::conditionalInclude( $text, '__NOHEADER__',   'hf-header', $name );
+		$footer   = self::conditionalInclude( $text, '__NOFOOTER__',   'hf-footer', $name );
+		$nsfooter = self::conditionalInclude( $text, '__NONSFOOTER__', 'hf-nsfooter', $ns );
 
-		$header = "hf-header-$name";
-		$footer = "hf-footer-$name";
+		$parserOutput->setText( $nsheader . $header . $text . $footer . $nsfooter );
 
-		$text = '<div class="hf-header">'.self::conditionalInclude( $text, '__NOHEADER__', $header ).'</div>'.$text;
-		$text = '<div class="hf-nsheader">'.self::conditionalInclude( $text, '__NONSHEADER__', $nsheader ).'</div>'.$text;
-
-		$text .= '<div class="hf-footer">'.self::conditionalInclude( $text, '__NOFOOTER__', $footer ).'</div>';
-		$text .= '<div class="hf-nsfooter">'.self::conditionalInclude( $text, '__NONSFOOTER__', $nsfooter ).'</div>';
-
-		$parserOutput->setText( $text );
+		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
+		if ( $egHeaderFooterEnableAsyncFooter || $egHeaderFooterEnableAsyncHeader ) {
+			$op->addModules( 'ext.headerfooter.dynamicload' );
+		}
 
 		return true;
 	}
@@ -41,8 +39,8 @@ class HeaderFooter
 	/**
 	 * Verifies & Strips ''disable command'', returns $content if all OK.
 	 */
-	static function conditionalInclude( &$text, $disableWord, &$msgId ) {
-		
+	static function conditionalInclude( &$text, $disableWord, $class, $unique ) {
+
 		// is there a disable command lurking around?
 		$disable = strpos( $text, $disableWord ) !== false;
 
@@ -55,18 +53,46 @@ class HeaderFooter
 			return null;
 		}
 
-		$msgText = wfMessage( $msgId )->parse();
+		$msgId = "$class-$unique"; // also HTML ID
+		$div = "<div class='$class' id='$msgId'>";
 
-		// don't need to bother if there is no content.
-		if ( empty( $msgText ) ) {
-			return null;
+		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
+
+		$isHeader = $class === 'hf-nsheader' || $class === 'hf-header';
+		$isFooter = $class === 'hf-nsfooter' || $class === 'hf-footer';
+
+		if ( ( $egHeaderFooterEnableAsyncFooter && $isFooter )
+			|| ( $egHeaderFooterEnableAsyncHeader && $isHeader ) ) {
+
+			// Just drop an empty div into the page. Will fill it with async
+			// request after page load
+			return $div . '</div>';
 		}
+		else {
+			$msgText = wfMessage( $msgId )->parse();
 
-		if ( wfMessage( $msgId )->inContentLanguage()->isBlank() ) {
-			return null;
- 		}
+			// don't need to bother if there is no content.
+			if ( empty( $msgText ) ) {
+				return null;
+			}
 
-		return $msgText;
+			if ( wfMessage( $msgId )->inContentLanguage()->isBlank() ) {
+				return null;
+			}
+
+			return $div . $msgText . '</div>';
+		}
+	}
+
+	public static function onResourceLoaderGetConfigVars ( array &$vars ) {
+		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
+
+		$vars['egHeaderFooter'] = [
+			'enableAsyncHeader' => $egHeaderFooterEnableAsyncHeader,
+			'enableAsyncFooter' => $egHeaderFooterEnableAsyncFooter,
+		];
+
+		return true;
 	}
 
 }
