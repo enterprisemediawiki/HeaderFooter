@@ -16,6 +16,11 @@
 		"OutputPageParserOutput": "HeaderFooter::hOutputPageParserOutput",
 		"ResourceLoaderGetConfigVars": "HeaderFooter::onResourceLoaderGetConfigVars"
 	},
+	"MessagesDirs": {
+		"HeaderFooter": [
+			"i18n"
+		]
+	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "modules",
 		"remoteExtPath": "HeaderFooter/modules"
