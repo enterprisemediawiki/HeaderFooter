@@ -21,10 +21,6 @@ class HeaderFooter
 
 		$text = $parserOutput->getText();
 
-		/*sm
-		 * 1. Get categories with the localized namespace.
-		 * 2. Construct header and footer for all categories together.
-		 */
 		$categories = array_keys( $wgTitle->getParentCategories() ) ;
 		$catheader = "" ;
 		$catfooter = "" ;
@@ -33,7 +29,6 @@ class HeaderFooter
 			$catheader = $catheader . self::conditionalInclude( $text, '__NOCATHEADER__', 'hf-catheader', $catname );
 			$catfooter = self::conditionalInclude( $text, '__NOCATFOOTER__', 'hf-catfooter', $catname ) . $catfooter;
 		}
-		/****/
 
 		$nsheader = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
 		$header   = self::conditionalInclude( $text, '__NOHEADER__',   'hf-header', $name );
@@ -72,11 +67,13 @@ class HeaderFooter
 
 		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
 
-		$isHeader = $class === 'hf-nsheader' || $class === 'hf-header' || substr( $class, 0, 12) === 'hf-catheader';
-		$isFooter = $class === 'hf-nsfooter' || $class === 'hf-footer' || substr( $class, 0, 12) === 'hf-catfooter';
+		$isHeader = $class === 'hf-nsheader' || $class === 'hf-header';
+		$isFooter = $class === 'hf-nsfooter' || $class === 'hf-footer';
+		$isCat = substr( $class, 0, 12) === 'hf-catheader' || substr( $class, 0, 12) === 'hf-catfooter';
+		// Category headers or footers disable async loading!
 
-		if ( ( $egHeaderFooterEnableAsyncFooter && $isFooter )
-			|| ( $egHeaderFooterEnableAsyncHeader && $isHeader ) ) {
+		if ( !$isCat && ( ( $egHeaderFooterEnableAsyncFooter && $isFooter )
+			|| ( $egHeaderFooterEnableAsyncHeader && $isHeader ) ) ) {
 
 			// Just drop an empty div into the page. Will fill it with async
 			// request after page load
