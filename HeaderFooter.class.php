@@ -21,12 +21,26 @@ class HeaderFooter
 
 		$text = $parserOutput->getText();
 
+		/*sm
+		 * 1. Get categories with the localized namespace.
+		 * 2. Construct header and footer for all categories together.
+		 */
+		$categories = array_keys( $wgTitle->getParentCategories() ) ;
+		$catheader = "" ;
+		$catfooter = "" ;
+                foreach( $categories as &$cat ) {
+                        $catname = substr( $cat, strpos( $cat, ":" ) + 1 );
+			$catheader = $catheader . self::conditionalInclude( $text, '__NOCATHEADER__', 'hf-catheader', $catname );
+			$catfooter = self::conditionalInclude( $text, '__NOCATFOOTER__', 'hf-catfooter', $catname ) . $catfooter;
+		}
+		/****/
+
 		$nsheader = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
 		$header   = self::conditionalInclude( $text, '__NOHEADER__',   'hf-header', $name );
 		$footer   = self::conditionalInclude( $text, '__NOFOOTER__',   'hf-footer', $name );
 		$nsfooter = self::conditionalInclude( $text, '__NONSFOOTER__', 'hf-nsfooter', $ns );
 
-		$parserOutput->setText( $nsheader . $header . $text . $footer . $nsfooter );
+		$parserOutput->setText( $nsheader . $catheader . $header . $text . $footer . $catfooter . $nsfooter );
 
 		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
 		if ( $egHeaderFooterEnableAsyncFooter || $egHeaderFooterEnableAsyncHeader ) {
@@ -58,8 +72,8 @@ class HeaderFooter
 
 		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
 
-		$isHeader = $class === 'hf-nsheader' || $class === 'hf-header';
-		$isFooter = $class === 'hf-nsfooter' || $class === 'hf-footer';
+		$isHeader = $class === 'hf-nsheader' || $class === 'hf-header' || substr( $class, 0, 12) === 'hf-catheader';
+		$isFooter = $class === 'hf-nsfooter' || $class === 'hf-footer' || substr( $class, 0, 12) === 'hf-catfooter';
 
 		if ( ( $egHeaderFooterEnableAsyncFooter && $isFooter )
 			|| ( $egHeaderFooterEnableAsyncHeader && $isHeader ) ) {
@@ -94,5 +108,4 @@ class HeaderFooter
 
 		return true;
 	}
-
 }
