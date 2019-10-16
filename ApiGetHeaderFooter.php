@@ -17,7 +17,7 @@ class ApiGetHeaderFooter extends ApiBase {
 		$params = $this->extractRequestParams();
 		$contextTitle = Title::newFromDBkey( $params['contexttitle'] );
 		if ( ! $contextTitle ) {
-			$this->dieUsage( "Not a valid contexttitle.", 'notarget' );
+			$this->dieWithError( "Not a valid contexttitle.", 'notarget' );
 		}
 
 		$messageId = $params['messageid'];
