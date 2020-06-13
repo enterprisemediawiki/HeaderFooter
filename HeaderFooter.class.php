@@ -21,12 +21,21 @@ class HeaderFooter
 
 		$text = $parserOutput->getText();
 
+		$categories = array_keys( $wgTitle->getParentCategories() ) ;
+		$catheader = "" ;
+		$catfooter = "" ;
+                foreach( $categories as &$cat ) {
+                        $catname = substr( $cat, strpos( $cat, ":" ) + 1 );
+			$catheader = $catheader . self::conditionalInclude( $text, '__NOCATHEADER__', 'hf-catheader', $catname );
+			$catfooter = self::conditionalInclude( $text, '__NOCATFOOTER__', 'hf-catfooter', $catname ) . $catfooter;
+		}
+
 		$nsheader = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
 		$header   = self::conditionalInclude( $text, '__NOHEADER__',   'hf-header', $name );
 		$footer   = self::conditionalInclude( $text, '__NOFOOTER__',   'hf-footer', $name );
 		$nsfooter = self::conditionalInclude( $text, '__NONSFOOTER__', 'hf-nsfooter', $ns );
 
-		$parserOutput->setText( $nsheader . $header . $text . $footer . $nsfooter );
+		$parserOutput->setText( $nsheader . $catheader . $header . $text . $footer . $catfooter . $nsfooter );
 
 		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
 		if ( $egHeaderFooterEnableAsyncFooter || $egHeaderFooterEnableAsyncHeader ) {
@@ -60,9 +69,11 @@ class HeaderFooter
 
 		$isHeader = $class === 'hf-nsheader' || $class === 'hf-header';
 		$isFooter = $class === 'hf-nsfooter' || $class === 'hf-footer';
+		$isCat = substr( $class, 0, 12) === 'hf-catheader' || substr( $class, 0, 12) === 'hf-catfooter';
+		// Category headers or footers disable async loading!
 
-		if ( ( $egHeaderFooterEnableAsyncFooter && $isFooter )
-			|| ( $egHeaderFooterEnableAsyncHeader && $isHeader ) ) {
+		if ( !$isCat && ( ( $egHeaderFooterEnableAsyncFooter && $isFooter )
+			|| ( $egHeaderFooterEnableAsyncHeader && $isHeader ) ) ) {
 
 			// Just drop an empty div into the page. Will fill it with async
 			// request after page load
@@ -94,5 +105,4 @@ class HeaderFooter
 
 		return true;
 	}
-
 }
