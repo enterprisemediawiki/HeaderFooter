@@ -21,12 +21,15 @@ class HeaderFooter
 
 		$text = $parserOutput->getText();
 
-		$nsheader = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
-		$header   = self::conditionalInclude( $text, '__NOHEADER__',   'hf-header', $name );
-		$footer   = self::conditionalInclude( $text, '__NOFOOTER__',   'hf-footer', $name );
-		$nsfooter = self::conditionalInclude( $text, '__NONSFOOTER__', 'hf-nsfooter', $ns );
+		$globalheader = self::conditionalInclude( $text, '__NOGLOBALHEADER__', 'hf-global-header', null );
+		$nsheader     = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
+		$header       = self::conditionalInclude( $text, '__NOHEADER__', 'hf-header', $name );
+		$footer       = self::conditionalInclude( $text, '__NOFOOTER__', 'hf-footer', $name );
+		$nsfooter     = self::conditionalInclude( $text, '__NONSFOOTER__', 'hf-nsfooter', $ns );
+		$globalfooter = self::conditionalInclude( $text, '__NOGLOBALFOOTER__', 'hf-global-footer', null );
 
-		$parserOutput->setText( $nsheader . $header . $text . $footer . $nsfooter );
+		$parserOutput->setText(
+			$globalheader . $nsheader . $header . $text . $footer . $nsfooter . $globalfooter );
 
 		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
 		if ( $egHeaderFooterEnableAsyncFooter || $egHeaderFooterEnableAsyncHeader ) {
@@ -53,7 +56,7 @@ class HeaderFooter
 			return null;
 		}
 
-		$msgId = "$class-$unique"; // also HTML ID
+		$msgId = $unique === null ? $class : "$class-$unique"; // also HTML ID
 		$div = "<div class='$class' id='$msgId'>";
 
 		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
