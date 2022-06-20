@@ -34,8 +34,12 @@
 	},
 	"config_prefix": "egHeaderFooter",
 	"config": {
-		"EnableAsyncHeader": false,
-		"EnableAsyncFooter": false
+		"EnableAsyncHeader": {
+			"value": false
+		},
+		"EnableAsyncFooter":  {
+			"value": false
+		}
 	},
 	"manifest_version": 2
 }
