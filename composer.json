@@ -28,6 +28,6 @@
 		"github": "https://github.com/enterprisemediawiki/HeaderFooter/issues"
 	},
 	"require": {
-		"composer/installers": ">=1.0.1"
+		"composer/installers": ">=1.0.1|~2"
 	}
 }
