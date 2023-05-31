@@ -14,12 +14,16 @@
 	},
 	"Hooks": {
 		"OutputPageParserOutput": "HeaderFooter::hOutputPageParserOutput",
-		"ResourceLoaderGetConfigVars": "HeaderFooter::onResourceLoaderGetConfigVars"
+		"ResourceLoaderGetConfigVars": "HeaderFooter::onResourceLoaderGetConfigVars",
+		"GetDoubleUnderscoreIDs": "HeaderFooter::onGetDoubleUnderscoreIDs"
 	},
 	"MessagesDirs": {
 		"HeaderFooter": [
 			"i18n"
 		]
+	},
+	"ExtensionMessagesFiles": {
+		"HeaderFooterMagic": "languages/HeaderFooter.i18n.magic.php"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "modules",
