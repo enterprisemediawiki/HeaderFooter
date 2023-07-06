@@ -34,11 +34,11 @@ for ( var i = 0; i < extHeaderFooterBlocks.length; i++ ) {
 				format: "json"
 			},
 			function ( response ) {
-				// var blockText = response.query.allmessages[0]["*"];
 				var blockText = response.getheaderfooter.result;
 				$( "#" + msgId ).html( blockText );
 				$( "#" + msgId ).find( "#headertabs" ).each( function(i,e) {
-					$(e).tabs();
+					// Ensure headertabs is loaded after dynamic content added
+					mw.loader.using( ['ext.headertabs'] );
 				});
 			}
 		)
