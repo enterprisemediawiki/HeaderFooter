@@ -6,10 +6,12 @@ class HeaderFooter
 {
 	/**
 	 * Main Hook
+	 * @param OutputPage $op
+	 * @param ParserOutput $parserOutput
 	 */
 	public static function hOutputPageParserOutput( &$op, $parserOutput ) {
 
-		$action = $op->parserOptions()->getUser()->getRequest()->getVal("action");
+		$action = $op->getRequest()->getVal("action");
 		if ( ($action == 'edit') || ($action == 'submit') || ($action == 'history') ) {
 			return true;
 		}
@@ -19,13 +21,13 @@ class HeaderFooter
 		$ns = $wgTitle->getNsText();
 		$name = $wgTitle->getPrefixedDBKey();
 
-		$text = $parserOutput->getText();
+		$nsheader = self::conditionalInclude( 'hf_nsheader', 'hf-nsheader', $ns, $parserOutput );
+		$header   = self::conditionalInclude( 'hf_header', 'hf-header', $name, $parserOutput );
+		$footer   = self::conditionalInclude( 'hf_footer', 'hf-footer', $name, $parserOutput );
+		$nsfooter = self::conditionalInclude( 'hf_nsfooter', 'hf-nsfooter', $ns, $parserOutput );
 
-		$nsheader = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
-		$header   = self::conditionalInclude( $text, '__NOHEADER__',   'hf-header', $name );
-		$footer   = self::conditionalInclude( $text, '__NOFOOTER__',   'hf-footer', $name );
-		$nsfooter = self::conditionalInclude( $text, '__NONSFOOTER__', 'hf-nsfooter', $ns );
-
+		// Grab only raw text to prevent doubled parser-output class
+		$text = $parserOutput->getRawText();
 		$parserOutput->setText( $nsheader . $header . $text . $footer . $nsfooter );
 
 		global $egHeaderFooterEnableAsyncHeader, $egHeaderFooterEnableAsyncFooter;
@@ -36,20 +38,18 @@ class HeaderFooter
 		return true;
 	}
 
+	public static function onGetDoubleUnderscoreIDs( &$doubleUnderscoreIDs ) {
+		$doubleUnderscoreIDs[] = 'hf_nsheader';
+		$doubleUnderscoreIDs[] = 'hf_header';
+		$doubleUnderscoreIDs[] = 'hf_footer';
+		$doubleUnderscoreIDs[] = 'hf_nsfooter';
+	}
+
 	/**
 	 * Verifies & Strips ''disable command'', returns $content if all OK.
 	 */
-	static function conditionalInclude( &$text, $disableWord, $class, $unique ) {
-
-		// is there a disable command lurking around?
-		$disable = strpos( $text, $disableWord ) !== false;
-
-		// if there is, get rid of it
-		// make sure that the disableWord does not break the REGEX below!
-		$text = preg_replace('/'.$disableWord.'/si', '', $text );
-
-		// if there is a disable command, then don't return anything
-		if ( $disable ) {
+	static function conditionalInclude( $disableWord, $class, $unique, $parser ) {
+		if ( $parser->getPageProperty( $disableWord ) !== null ) {
 			return null;
 		}
 

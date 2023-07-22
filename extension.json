@@ -1,6 +1,6 @@
 {
 	"name": "HeaderFooter",
-	"version": "3.0.0",
+	"version": "4.0.0",
 	"author": "Jean-Lou Dupont, James Montalvo, Douglas Mason",
 	"url": "http://mediawiki.org/wiki/Extension:HeaderFooter",
 	"descriptionmsg": "headerfooter-desc",
@@ -14,12 +14,16 @@
 	},
 	"Hooks": {
 		"OutputPageParserOutput": "HeaderFooter::hOutputPageParserOutput",
-		"ResourceLoaderGetConfigVars": "HeaderFooter::onResourceLoaderGetConfigVars"
+		"ResourceLoaderGetConfigVars": "HeaderFooter::onResourceLoaderGetConfigVars",
+		"GetDoubleUnderscoreIDs": "HeaderFooter::onGetDoubleUnderscoreIDs"
 	},
 	"MessagesDirs": {
 		"HeaderFooter": [
 			"i18n"
 		]
+	},
+	"ExtensionMessagesFiles": {
+		"HeaderFooterMagic": "languages/HeaderFooter.i18n.magic.php"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "modules",
@@ -32,10 +36,14 @@
 			]
 		}
 	},
+	"config_prefix": "egHeaderFooter",
 	"config": {
-		"_prefix": "eg",
-		"HeaderFooterEnableAsyncHeader": false,
-		"HeaderFooterEnableAsyncFooter": false
+		"EnableAsyncHeader": {
+			"value": false
+		},
+		"EnableAsyncFooter":  {
+			"value": false
+		}
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }

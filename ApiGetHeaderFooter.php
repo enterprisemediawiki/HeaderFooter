@@ -7,6 +7,8 @@
  * @since Version 3.0
  */
 
+use Wikimedia\ParamValidator\ParamValidator;
+
 /**
  * API module to review revisions
  */
@@ -48,12 +50,12 @@ class ApiGetHeaderFooter extends ApiBase {
 	public function getAllowedParams() {
 		return array(
 			'contexttitle' => array(
-				ApiBase::PARAM_REQUIRED => true,
-				ApiBase::PARAM_TYPE => 'string'
+				ParamValidator::PARAM_REQUIRED => true,
+				ParamValidator::PARAM_TYPE => 'string'
 			),
 			'messageid' => array(
-				ApiBase::PARAM_REQUIRED => true,
-				ApiBase::PARAM_TYPE => 'string'
+				ParamValidator::PARAM_REQUIRED => true,
+				ParamValidator::PARAM_TYPE => 'string'
 			)
 		);
 	}
