@@ -19,7 +19,9 @@ class HeaderFooter
 		$ns = $wgTitle->getNsText();
 		$name = $wgTitle->getPrefixedDBKey();
 
-		$text = $parserOutput->getText();
+		// Get output markup omitting the `mw-parser-output` wrapper
+		// because the wrapper will be added later by $parserOutput->setText
+		$text = $parserOutput->getText( [ 'wrapperDivClass' => '' ] );
 
 		$nsheader = self::conditionalInclude( $text, '__NONSHEADER__', 'hf-nsheader', $ns );
 		$header   = self::conditionalInclude( $text, '__NOHEADER__',   'hf-header', $name );
